@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -r esm index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6",
     "morgan": "^1.10.0",
-    "nanoid": "^4.0.0"
+    "nanoid": "^3.3.4"
   }
 }

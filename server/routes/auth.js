@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
 const { signup, signin, forgotPassword, resetPassword } = require("../controllers/auth");
@@ -14,4 +14,4 @@ router.post("/signin", signin);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
-export default router;
+module.exports = router;

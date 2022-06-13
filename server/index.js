@@ -1,9 +1,8 @@
 require("dotenv").config();
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-
-import authRoutes from './routes/auth';
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
 
 const morgan = require('morgan');
 

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import axios from 'axios';
 
 const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -12,7 +13,8 @@ const SignUp = ({ navigation }) => {
             alert('Please fill all fields');
             return;
         }
-        await axios.post('http://localhost:8001/api/signup', { name, email, password });
+        const resp = await axios.post('http://localhost:8000/api/signup', { name, email, password });
+        console.log(resp.data);
         alert('Successfully signed up');
     }
 
