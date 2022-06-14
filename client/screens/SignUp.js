@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../context/auth';
 
 const SignUp = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [state, setState] = useContext(AuthContext);
 
     const handleSubmit = async () => {
         if(name === '' || email === '' || password === '') {
@@ -14,8 +17,14 @@ const SignUp = ({ navigation }) => {
             return;
         }
         const resp = await axios.post('http://localhost:8000/api/signup', { name, email, password });
-        console.log(resp.data);
-        alert('Successfully signed up');
+        if(resp.data.error) 
+            alert(resp.data.error);
+        else{
+            setState(resp.data)
+            await AsyncStorage.setItem('auth-rn', JSON.stringify(resp.data));
+            alert("Sign Up Successful");
+            navigation.navigate('Home');
+        }
     }
 
     return (
