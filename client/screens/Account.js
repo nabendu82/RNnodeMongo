@@ -40,26 +40,24 @@ const Account = ({ navigation }) => {
         }
     };
 
-    const handleUpload = async() => {
+    const handleUpload = async () => {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if(permissionResult.granted === false) {
+        if (permissionResult.granted === false) {
             alert("Camera access is required");
             return;
         }
-
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3],
-            base64: true
-        })
-
-        if(pickerResult.cancelled === true){
+            base64: true,
+        });
+        if (pickerResult.cancelled === true) {
             return;
         }
         let base64Image = `data:image/jpg;base64,${pickerResult.base64}`;
         setUploadImage(base64Image);
         const { data } = await axios.post("http://localhost:8000/api/upload-image", {
-            image: base64Image
+            image: base64Image,
         });
         console.log("UPLOADED RESPONSE => ", data);
     };

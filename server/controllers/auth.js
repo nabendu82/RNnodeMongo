@@ -2,6 +2,14 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { hashPassword, comparePassword } = require("../helpers/auth");
 const { nanoid } = require("nanoid");
+const cloudinary = require("cloudinary");
+
+// cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+});
 // sendgrid
 require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
