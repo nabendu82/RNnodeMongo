@@ -5,6 +5,7 @@ import { AuthContext } from '../context/auth';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import * as ImagePicker from "expo-image-picker";
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Account = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -21,22 +22,27 @@ const Account = ({ navigation }) => {
             setName(name);
             setEmail(email);
             setRole(role);
+            setImage(image);
         }
     }, [state]);
 
     const handleSubmit = async () => {
-        if (email === '' || password === '') {
-            alert("All fields are required");
-            return;
-        }
-        const resp = await axios.post("http://localhost:8000/api/signin", { email, password });
-        if(resp.data.error) 
-            alert(resp.data.error);
-        else{
-            setState(resp.data)
-            await AsyncStorage.setItem('auth-rn', JSON.stringify(resp.data));
-            alert("Sign In Successful");
-            navigation.navigate('Home');
+        try {
+            let storedData = await AsyncStorage.getItem("auth-rn");
+            const user = JSON.parse(storedData);
+            console.log('stored ---->')
+            console.log(storedData)
+            console.log(user)
+            const resp = await axios.post("http://localhost:8000/api/update-password", { password, user });
+            const data = resp.data;
+            if(data.error) alert(data.error);
+            else{
+                alert("Password updated successfully");
+                setPassword("");
+            }
+        } catch (error) {
+            alert("Password update failed");
+            console.log(error);
         }
     };
 
@@ -56,10 +62,21 @@ const Account = ({ navigation }) => {
         }
         let base64Image = `data:image/jpg;base64,${pickerResult.base64}`;
         setUploadImage(base64Image);
+
+        let storedData = await AsyncStorage.getItem("auth-rn");
+        const parsed = JSON.parse(storedData);
+
         const { data } = await axios.post("http://localhost:8000/api/upload-image", {
             image: base64Image,
+            user: parsed.user
         });
         console.log("UPLOADED RESPONSE => ", data);
+        const stored = JSON.parse(await AsyncStorage.getItem("auth-rn"));
+        stored.user = data;
+        await AsyncStorage.setItem("auth-rn", JSON.stringify(stored));
+        setState({...state, user: data });
+        setImage(data.image);
+        alert("Profile image saved");
     };
 
     return (

@@ -154,3 +154,51 @@ exports.resetPassword = async (req, res) => {
         console.log(err);
     }
 };
+
+exports.uploadImage = async (req, res) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.body.image, {
+            public_id: nanoid(),
+            ressource_type: "jog"
+        })
+        console.log(req.body.user);
+        const user = await User.findByIdAndUpdate(req.body.user._id,{
+            image: {
+                public_id: result.public_id,
+                url: result.secure_url
+            }
+        }, { new: true });
+
+        return res.json({
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            image: user.image,
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.updatePassword = async (req, res) => {
+    try {
+        const { password } = req.body;
+        console.log(req.body.user.user._id)
+        if (password && password.length < 6) {
+            return res.json({
+                error: "Password is required and should be min 6 characters long",
+            });
+        } else {
+            // update db
+            const hashedPassword = await hashPassword(password);
+            const user = await User.findByIdAndUpdate(req.body.user.user._id, {
+                password: hashedPassword,
+            });
+            user.password = undefined;
+            user.secret = undefined;
+            return res.json(user);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
