@@ -9,6 +9,7 @@ import HeaderTabs from './header/HeaderTabs';
 import Account from '../screens/Account';
 import Post from '../screens/Post';
 import Links from '../screens/Links';
+import ForgotPassword from '../screens/ForgotPassword';
 
 const NavigationScreen = () => {
     const [state, setState] = useContext(AuthContext);
@@ -27,6 +28,7 @@ const NavigationScreen = () => {
                 <>
                     <Stack.Screen name="SignUp" component={SignUp} />
                     <Stack.Screen name="SignIn" component={SignIn} />
+                    <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
                 </>
             )}
             

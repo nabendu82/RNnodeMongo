@@ -50,7 +50,7 @@ const SignIn = ({ navigation }) => {
                         Sign Up
                     </Text>
                 </Text>
-                <Text style={{ fontSize: 12, textAlign: 'center', marginTop: 10 }}>Forgot Password?</Text>
+                <Text onPress={() => navigation.navigate("ForgotPassword")} style={styles.forgotText}>Forgot Password?</Text>
             </View>
         </KeyboardAwareScrollView>
     )
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
+    forgotText: { fontSize: 12, textAlign: 'center', marginTop: 10, color: 'darkgreen', fontWeight: 'bold' },
     signupText: {
         fontSize: 30,
         textAlign: 'center'
